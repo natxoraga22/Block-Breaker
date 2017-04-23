@@ -5,6 +5,8 @@ public class Ball : MonoBehaviour {
 
 	private Paddle paddle;
 
+	public Vector2 startVelocity = new Vector2 (2f, 10f);
+
 	private Vector3 paddleToBallVector;
 	private bool gameStarted = false;
 
@@ -30,7 +32,7 @@ public class Ball : MonoBehaviour {
 			// Wait for a mouse press to launch
 			if (Input.GetMouseButtonDown(0)) {
 				gameStarted = true;
-				ballRigidBody2D.velocity = new Vector2 (2f, 10f);
+				ballRigidBody2D.velocity = startVelocity;
 			}
 		}
 	}
