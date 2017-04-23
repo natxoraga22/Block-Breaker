@@ -16,8 +16,4 @@ public class LoseCollider : MonoBehaviour {
 		levelManager.LoadLevel ("Lose");
 	}
 
-	void OnCollisionEnter2D (Collision2D collision) {
-
-	}
-
 }
