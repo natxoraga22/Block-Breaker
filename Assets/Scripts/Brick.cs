@@ -9,6 +9,7 @@ public class Brick : MonoBehaviour {
 	private SpriteRenderer brickSpriteRenderer;
 
 	public AudioClip crackSound;
+	public GameObject smoke;
 
 	private bool isBreakable;
 	private int timesHit;
@@ -33,20 +34,35 @@ public class Brick : MonoBehaviour {
 		timesHit++;
 		int maxHits = hitSprites.Length + 1;
 		if (timesHit >= maxHits) {
-			breackableCount--;
-			// Load the next level if this is the last breackable block
-			if (breackableCount <= 0) levelManager.LoadNextLevel ();
-			GameObject.Destroy (gameObject);
+			HandleBrickDestruction ();
 		} 
 		else {
 			LoadSprite ();
 		}
 	}
 
+	void HandleBrickDestruction () {
+		breackableCount--;
+		// Load the next level if this is the last breackable block
+		if (breackableCount <= 0) levelManager.LoadNextLevel ();
+		// Finally, destroy the block and leave a destruction particle effect behind
+		EmitDestructionSmoke ();
+		GameObject.Destroy (gameObject);
+	}
+
+	void EmitDestructionSmoke () {
+		GameObject brickSmoke = (GameObject) Instantiate (smoke, this.transform.position, Quaternion.identity);
+		ParticleSystem brickSmokeParticleSystem = brickSmoke.GetComponent<ParticleSystem> ();
+		brickSmokeParticleSystem.startColor = brickSpriteRenderer.color;
+	}
+
 	void LoadSprite () {
 		int spriteIndex = timesHit - 1;
 		if (hitSprites [spriteIndex]) {
 			brickSpriteRenderer.sprite = hitSprites [spriteIndex];
+		} 
+		else {
+			Debug.LogError ("Brick sprite missing");
 		}
 	}
 
